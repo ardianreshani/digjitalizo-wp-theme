@@ -24,7 +24,7 @@ if (WC()->cart->needs_shipping()) {
                         <tr>
                             <th class="w-8"></th>
                             <th><?php esc_html_e('Produkti', 'base-theme'); ?></th>
-                            <th class="text-right"><?php esc_html_e('Mimi për njësi', 'base-theme'); ?></th>
+                            <th class="text-right"><?php esc_html_e('Çmimi për njësi', 'base-theme'); ?></th>
                             <th class="text-center"><?php esc_html_e('Sasia', 'base-theme'); ?></th>
                             <th class="text-right"><?php esc_html_e('Çmimi total', 'base-theme'); ?></th>
                         </tr>
@@ -46,7 +46,7 @@ if (WC()->cart->needs_shipping()) {
                         <tr class="<?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
 
                             <!-- Remove -->
-                            <td class="text-center">
+                            <td class="cart-remove-cell text-center">
                                 <?php echo apply_filters('woocommerce_cart_item_remove_link',
                                     sprintf('<a href="%s" class="cart-remove remove_from_cart_button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s">&times;</a>',
                                         esc_url(wc_get_cart_remove_url($cart_item_key)),
@@ -58,7 +58,7 @@ if (WC()->cart->needs_shipping()) {
                             </td>
 
                             <!-- Product -->
-                            <td>
+                            <td class="cart-product-column">
                                 <div class="cart-product-cell">
                                     <?php if ($product_permalink) : ?>
                                         <a href="<?php echo esc_url($product_permalink); ?>">
@@ -81,7 +81,7 @@ if (WC()->cart->needs_shipping()) {
                             </td>
 
                             <!-- Unit price -->
-                            <td class="text-right">
+                            <td class="cart-mobile-detail text-right" data-label="<?php esc_attr_e('Çmimi për njësi', 'base-theme'); ?>">
                                 <?php if ($_product->is_on_sale()) : ?>
                                     <span class="line-through text-[#aaa] text-xs block">
                                         <?php echo wc_price($_product->get_regular_price()); ?>
@@ -95,7 +95,7 @@ if (WC()->cart->needs_shipping()) {
                             </td>
 
                             <!-- Quantity -->
-                            <td class="text-center">
+                            <td class="cart-mobile-detail text-center" data-label="<?php esc_attr_e('Sasia', 'base-theme'); ?>">
                                 <div class="qty-stepper mx-auto w-fit">
                                     <button type="button" class="qty-minus">&#8722;</button>
                                     <input type="number"
@@ -110,7 +110,7 @@ if (WC()->cart->needs_shipping()) {
                             </td>
 
                             <!-- Line total -->
-                            <td class="cart-line-total"><?php echo $product_subtotal; ?></td>
+                            <td class="cart-mobile-detail cart-line-total" data-label="<?php esc_attr_e('Çmimi total', 'base-theme'); ?>"><?php echo $product_subtotal; ?></td>
                         </tr>
                     <?php endforeach; ?>
 

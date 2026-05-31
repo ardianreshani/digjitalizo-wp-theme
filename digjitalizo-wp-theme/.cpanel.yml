@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/ardian/public_html/wp-content/themes/digjitalizo-wp-theme/
+    - /bin/mkdir -p $DEPLOYPATH
+    - /usr/bin/rsync -a --exclude='.git/' --exclude='.github/' --exclude='.cpanel.yml' --exclude='node_modules/' ./ $DEPLOYPATH
