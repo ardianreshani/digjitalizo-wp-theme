@@ -66,9 +66,9 @@ $status_classes = [
             </div>
 
             <div class="order-card-total">
-                <div class="text-xs text-[#777] mb-0.5"><?php esc_html_e('Total', 'base-theme'); ?></div>
-                <div class="font-bold text-base text-[#191c1d]"><?php echo wp_kses_post($order->get_formatted_order_total()); ?></div>
-                <div class="text-xs text-[#777]"><?php printf(_n('%d produkt', '%d produkte', $item_count, 'base-theme'), $item_count); ?></div>
+                <div class="text-xs text-muted mb-0.5"><?php esc_html_e('Total', 'base-theme'); ?></div>
+                <div class="font-bold text-base text-heading"><?php echo wp_kses_post($order->get_formatted_order_total()); ?></div>
+                <div class="text-xs text-muted"><?php printf(_n('%d produkt', '%d produkte', $item_count, 'base-theme'), $item_count); ?></div>
             </div>
         </div>
 
@@ -120,7 +120,7 @@ $status_classes = [
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-14 h-14 text-[#ccc] mb-3">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z"/>
     </svg>
-    <p class="text-[#555] mb-4"><?php esc_html_e('Nuk keni bërë ende asnjë porosi.', 'base-theme'); ?></p>
+    <p class="text-muted mb-4"><?php esc_html_e('Nuk keni bërë ende asnjë porosi.', 'base-theme'); ?></p>
     <a href="<?php echo esc_url(apply_filters('woocommerce_return_to_shop_redirect', wc_get_page_permalink('shop'))); ?>"
        class="btn">
         <?php esc_html_e('Shfletoni produktet', 'base-theme'); ?>

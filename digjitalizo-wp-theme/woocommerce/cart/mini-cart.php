@@ -88,7 +88,7 @@ if (!WC()->cart->is_empty()) :
 
 <?php else : ?>
 
-<p class="text-sm text-[#777] text-center py-8"><?php esc_html_e('Shporta juaj është bosh.', 'base-theme'); ?></p>
+<p class="text-sm text-muted text-center py-8"><?php esc_html_e('Shporta juaj është bosh.', 'base-theme'); ?></p>
 
 <?php endif; ?>
 

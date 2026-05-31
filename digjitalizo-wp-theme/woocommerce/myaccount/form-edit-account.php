@@ -47,7 +47,7 @@ do_action('woocommerce_before_edit_account_form');
             <input type="text" id="account_display_name" name="account_display_name"
                    value="<?php echo esc_attr($user->display_name); ?>"
                    aria-required="true" required>
-            <p class="text-xs text-[#777] mt-1"><?php esc_html_e('Ky emër do të shfaqet në llogarinë tuaj dhe në komente.', 'base-theme'); ?></p>
+            <p class="text-xs text-muted mt-1"><?php esc_html_e('Ky emër do të shfaqet në llogarinë tuaj dhe në komente.', 'base-theme'); ?></p>
         </div>
 
         <div class="form-field">
@@ -67,7 +67,7 @@ do_action('woocommerce_before_edit_account_form');
     <!-- Password change -->
     <div class="account-form-section">
         <h3 class="account-form-section-title"><?php esc_html_e('Ndrysho fjalëkalimin', 'base-theme'); ?></h3>
-        <p class="text-sm text-[#777] mb-4"><?php esc_html_e('Lërini bosh nëse nuk dëshironi të ndryshoni fjalëkalimin.', 'base-theme'); ?></p>
+        <p class="text-sm text-muted mb-4"><?php esc_html_e('Lërini bosh nëse nuk dëshironi të ndryshoni fjalëkalimin.', 'base-theme'); ?></p>
 
         <div class="form-field">
             <label for="password_current"><?php esc_html_e('Fjalëkalimi aktual', 'base-theme'); ?></label>

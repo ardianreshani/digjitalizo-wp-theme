@@ -23,7 +23,7 @@ if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) {
     <h3 class="order-summary-title"><?php esc_html_e('Totali i porosisë:', 'base-theme'); ?></h3>
 
     <div class="mb-3">
-        <div class="flex items-center justify-between text-xs font-semibold text-[#555] uppercase tracking-wide pb-2 border-b border-[#f0f0f0]">
+        <div class="flex items-center justify-between text-xs font-semibold text-muted uppercase tracking-wide pb-2 border-b border-[#f0f0f0]">
             <span><?php esc_html_e('Produktet', 'base-theme'); ?></span>
             <span><?php esc_html_e('Çmimi total', 'base-theme'); ?></span>
         </div>

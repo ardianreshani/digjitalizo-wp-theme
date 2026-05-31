@@ -68,6 +68,19 @@ $has_thumbs = count($images) > 1;
              <?php endif; ?>
              alt="<?php echo esc_attr($images[0]['alt']); ?>"
              loading="eager">
+
+        <?php if ($has_thumbs) : ?>
+            <button type="button" class="pga__nav pga__nav--prev" aria-label="<?php esc_attr_e('Previous product image', 'base-theme'); ?>">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button type="button" class="pga__nav pga__nav--next" aria-label="<?php esc_attr_e('Next product image', 'base-theme'); ?>">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        <?php endif; ?>
     </div>
 
     <?php if ($has_thumbs) : ?>

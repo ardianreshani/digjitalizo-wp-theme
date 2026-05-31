@@ -12,7 +12,6 @@ if (WC()->cart->needs_shipping()) {
 ?>
 
 <div class="cart-layout">
-
     <!-- ── Left: product table ──────────────────────────────────────────── -->
     <div>
         <form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
@@ -174,32 +173,11 @@ $related_products = wc_get_products([
 <?php if ($related_products) : ?>
 <section class="cart-related">
     <h2><?php esc_html_e('Produkte të ngjashme', 'base-theme'); ?></h2>
-    <div class="cart-related-grid">
+    <ul class="cart-related-grid products">
         <?php foreach ($related_products as $related_product) : ?>
-            <article class="cart-related-card">
-                <a href="<?php echo esc_url($related_product->get_permalink()); ?>" class="cart-related-image">
-                    <img src="<?php echo esc_url(wp_get_attachment_image_url($related_product->get_image_id(), 'medium') ?: wc_placeholder_img_src('medium')); ?>"
-                         alt="<?php echo esc_attr($related_product->get_name()); ?>">
-                </a>
-                <div class="cart-related-content">
-                    <a href="<?php echo esc_url($related_product->get_permalink()); ?>" class="cart-related-title">
-                        <?php echo esc_html($related_product->get_name()); ?>
-                    </a>
-                    <div class="cart-related-price"><?php echo $related_product->get_price_html(); ?></div>
-                </div>
-                <a href="<?php echo esc_url($related_product->add_to_cart_url()); ?>"
-                   data-quantity="1"
-                   data-product_id="<?php echo esc_attr($related_product->get_id()); ?>"
-                   data-product_sku="<?php echo esc_attr($related_product->get_sku()); ?>"
-                   class="btn cart-related-button <?php echo esc_attr($related_product->supports('ajax_add_to_cart') ? 'ajax_add_to_cart add_to_cart_button' : 'add_to_cart_button'); ?>">
-                    <?php esc_html_e('Blej tani', 'base-theme'); ?>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                        <path d="M1 1.75A.75.75 0 011.75 1h1.628a1.75 1.75 0 011.734 1.51L5.43 3h13.345a1.75 1.75 0 011.729 2.026l-1.216 6.5A1.75 1.75 0 0117.558 13H7.364a1.75 1.75 0 01-1.73-1.51L4.5 3.98a.25.25 0 00-.248-.23H1.75A.75.75 0 011 3v-1.25z"/>
-                    </svg>
-                </a>
-            </article>
+            <?php emsaks_render_product_loop_card($related_product); ?>
         <?php endforeach; ?>
-    </div>
+    </ul>
 </section>
 <?php endif; ?>
 

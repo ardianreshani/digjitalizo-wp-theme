@@ -8,19 +8,18 @@ do_action('woocommerce_before_my_account_page');
 
     <?php if (is_user_logged_in()) :
         $current_user = wp_get_current_user();
-        $avatar = get_avatar_url($current_user->user_email, ['size' => 80, 'default' => 'mysteryman']);
+        $account_name = $current_user->display_name ?: $current_user->user_login;
+        $account_initial = strtoupper(substr($account_name, 0, 1));
     ?>
 
     <!-- Account hero -->
     <div class="account-hero">
         <div class="account-hero-left">
             <div class="account-hero-avatar">
-                <img src="<?php echo esc_url($avatar); ?>"
-                     alt="<?php echo esc_attr($current_user->display_name); ?>"
-                     class="account-avatar-img">
+                <span class="account-avatar-initials"><?php echo esc_html($account_initial); ?></span>
             </div>
             <div class="account-hero-info">
-                <div class="account-hero-name"><?php echo esc_html($current_user->display_name); ?></div>
+                <div class="account-hero-name"><?php echo esc_html($account_name); ?></div>
                 <div class="account-hero-email"><?php echo esc_html($current_user->user_email); ?></div>
             </div>
         </div>

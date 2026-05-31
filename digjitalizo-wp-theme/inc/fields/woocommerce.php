@@ -4,26 +4,6 @@ acf_add_local_field_group([
     'key'    => 'group_woocommerce',
     'title'  => 'WooCommerce',
     'fields' => [
-        // ─── Shop Layout ─────────────────────────────────────────────────────
-        [
-            'key'     => 'field_woo_shop_columns',
-            'label'   => 'Shop Columns',
-            'name'    => 'woo_shop_columns',
-            'type'    => 'select',
-            'choices' => ['2' => '2 Columns', '3' => '3 Columns', '4' => '4 Columns'],
-            'default_value' => '3',
-            'return_format' => 'value',
-        ],
-        [
-            'key'           => 'field_woo_products_per_page',
-            'label'         => 'Products Per Page',
-            'name'          => 'woo_products_per_page',
-            'type'          => 'number',
-            'default_value' => 12,
-            'min'           => 4,
-            'max'           => 96,
-        ],
-
         // ─── Product Gallery ──────────────────────────────────────────────────
         [
             'key'           => 'field_woo_gallery_enabled',
@@ -81,6 +61,18 @@ acf_add_local_field_group([
             'return_format' => 'value',
         ],
 
+        // ─── Out-of-Stock Inquiry ─────────────────────────────────────────────
+        [
+            'key'           => 'field_woo_inquiry_form',
+            'label'         => 'Out-of-Stock Inquiry Form',
+            'name'          => 'woo_inquiry_form',
+            'type'          => 'post_object',
+            'post_type'     => ['wpcf7_contact_form'],
+            'return_format' => 'id',
+            'allow_null'    => 1,
+            'instructions'  => 'Select the Contact Form 7 form to show when a product is out of stock. Leave empty to hide the inquiry button.',
+        ],
+
         // ─── Free Shipping ────────────────────────────────────────────────────
         [
             'key'          => 'field_woo_free_shipping_threshold',
@@ -97,48 +89,6 @@ acf_add_local_field_group([
             'type'         => 'text',
             'default_value'=> 'Add {amount} more for free shipping!',
             'instructions' => 'Use {amount} as placeholder for the remaining amount.',
-        ],
-
-        // ─── Trust Badges ─────────────────────────────────────────────────────
-        [
-            'key'          => 'field_woo_trust_badges',
-            'label'        => 'Trust Badges',
-            'name'         => 'woo_trust_badges',
-            'type'         => 'repeater',
-            'instructions' => 'Shown on cart and checkout pages.',
-            'min'          => 0,
-            'max'          => 6,
-            'layout'       => 'table',
-            'button_label' => 'Add Badge',
-            'sub_fields'   => [
-                [
-                    'key'           => 'field_badge_icon',
-                    'label'         => 'Icon',
-                    'name'          => 'badge_icon',
-                    'type'          => 'image',
-                    'return_format' => 'array',
-                    'preview_size'  => 'thumbnail',
-                    'wrapper'       => ['width' => '30'],
-                ],
-                [
-                    'key'     => 'field_badge_label',
-                    'label'   => 'Label',
-                    'name'    => 'badge_label',
-                    'type'    => 'text',
-                    'placeholder' => 'Secure Payment',
-                    'wrapper' => ['width' => '70'],
-                ],
-            ],
-        ],
-
-        // ─── Checkout ─────────────────────────────────────────────────────────
-        [
-            'key'          => 'field_woo_checkout_promo',
-            'label'        => 'Checkout Promo Text',
-            'name'         => 'woo_checkout_promo',
-            'type'         => 'text',
-            'placeholder'  => 'You\'re one step away from your order!',
-            'instructions' => 'Shown above the checkout form.',
         ],
     ],
     'location' => [[['param' => 'options_page', 'operator' => '==', 'value' => 'theme-woocommerce']]],

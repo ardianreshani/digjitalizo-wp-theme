@@ -23,6 +23,8 @@ $sub_pages = [
     ['Header',            'theme-header'],
     ['Footer',            'theme-footer'],
     ['WooCommerce',       'theme-woocommerce'],
+    ['Templates',         'theme-templates'],
+    ['Media Uploads',     'theme-media-uploads'],
 ];
 
 foreach ($sub_pages as [$title, $slug]) {
@@ -43,6 +45,8 @@ $fields = [
     'header',
     'footer',
     'woocommerce',
+    'global-options',
+    'media-uploads',
 ];
 
 foreach ($fields as $file) {

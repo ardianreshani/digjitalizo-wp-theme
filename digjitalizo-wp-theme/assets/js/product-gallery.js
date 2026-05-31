@@ -45,6 +45,18 @@
             lightboxOpen(current);
         });
 
+        $gallery.find('.pga__nav--prev').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navMain(-1);
+        });
+
+        $gallery.find('.pga__nav--next').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navMain(1);
+        });
+
         buildLightbox();
 
         /* Variation image swap */
@@ -59,6 +71,13 @@
         var img = images[idx];
         setMain(img.src, img.srcset, img.sizes, img.alt);
         $thumbs.removeClass('is-active').eq(idx).addClass('is-active');
+    }
+
+    function navMain(dir) {
+        if (images.length < 2) return;
+
+        var next = (current + dir + images.length) % images.length;
+        goTo(next);
     }
 
     function setMain(src, srcset, sizes, alt) {

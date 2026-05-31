@@ -196,7 +196,7 @@ if (WC()->cart->needs_shipping()) {
             <!-- Shipping methods -->
             <?php if (WC()->cart->needs_shipping()) : ?>
             <div class="checkout-section">
-                <h2 class="checkout-section-title text-xs font-semibold uppercase tracking-widest text-[#555] mb-3">
+                <h2 class="checkout-section-title text-xs font-semibold uppercase tracking-widest text-muted mb-3">
                     <?php esc_html_e('Mënyra e transportit', 'base-theme'); ?>
                 </h2>
                 <?php echo function_exists('emsaks_render_checkout_shipping_methods') ? emsaks_render_checkout_shipping_methods() : ''; ?>
