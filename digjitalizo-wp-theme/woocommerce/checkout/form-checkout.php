@@ -41,7 +41,7 @@ if (WC()->cart->needs_shipping()) {
     <div class="checkout-layout">
 
         <!-- ── Left: form ─────────────────────────────────────────────── -->
-        <div>
+        <div class="checkout-form-column">
 
             <?php if ($checkout->get_checkout_fields()) : ?>
 
@@ -225,7 +225,7 @@ if (WC()->cart->needs_shipping()) {
         </div><!-- left col -->
 
         <!-- ── Right: order summary ────────────────────────────────── -->
-        <div>
+        <div class="checkout-summary-column">
             <?php do_action('woocommerce_checkout_before_order_review'); ?>
 
             <div id="order_review" class="woocommerce-checkout-review-order">
