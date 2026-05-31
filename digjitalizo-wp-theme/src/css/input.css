@@ -1782,6 +1782,38 @@
   .thankyou-product-price { @apply text-sm font-bold text-right shrink-0; }
   .thankyou-product-price .was { @apply line-through text-sale block text-xs font-normal; }
 
+  @media (max-width: 639px) {
+    .thankyou-page {
+      @apply py-8;
+    }
+    .thankyou-banner {
+      @apply mb-8 px-4 py-6;
+    }
+    .thankyou-banner h2 {
+      @apply text-2xl;
+    }
+    .thankyou-card {
+      @apply px-4 py-6;
+    }
+    .thankyou-card-title {
+      @apply mb-6;
+    }
+    .thankyou-meta-grid {
+      @apply gap-6 mb-8;
+    }
+    .thankyou-product-row {
+      @apply grid-cols-[56px_minmax(0,1fr)] items-start gap-x-3 gap-y-1 border-b border-[#f0f0f0];
+    }
+    .thankyou-product-img {
+      @apply row-span-3 h-14 w-14;
+    }
+    .thankyou-product-meta,
+    .thankyou-product-price {
+      @apply text-left;
+      grid-column: 2;
+    }
+  }
+
   .print-btn {
     @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded
            font-semibold text-sm leading-none border-2 transition-colors mt-4;
@@ -1894,7 +1926,8 @@
   .mini-cart-overlay,
   .mobile-primary-menu,
   .mobile-bottom-nav,
-  .header-language-switcher {
+  .header-language-switcher,
+  .wpml-ls-statics-footer  {
     display: none !important;
   }
 

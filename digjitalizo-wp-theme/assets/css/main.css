@@ -6105,6 +6105,65 @@ body.woocommerce-account .woocommerce {
   text-decoration-line: line-through;
 }
 
+@media (max-width: 639px) {
+  .thankyou-page {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .thankyou-banner {
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .thankyou-banner h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .thankyou-card {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .thankyou-card-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .thankyou-meta-grid {
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+  }
+
+  .thankyou-product-row {
+    grid-template-columns: 56px minmax(0,1fr);
+    align-items: flex-start;
+    -moz-column-gap: 0.75rem;
+         column-gap: 0.75rem;
+    row-gap: 0.25rem;
+    border-bottom-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(240 240 240 / var(--tw-border-opacity, 1));
+  }
+
+  .thankyou-product-img {
+    grid-row: span 3 / span 3;
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  .thankyou-product-meta,
+    .thankyou-product-price {
+    text-align: left;
+    grid-column: 2;
+  }
+}
+
 .print-btn {
   margin-top: 1rem;
   display: inline-flex;
@@ -10844,7 +10903,8 @@ body.inquiry-dialog-open {
   .mini-cart-overlay,
   .mobile-primary-menu,
   .mobile-bottom-nav,
-  .header-language-switcher {
+  .header-language-switcher,
+  .wpml-ls-statics-footer  {
     display: none !important;
   }
 
