@@ -220,7 +220,78 @@ function emsaks_get_favicon_src($favicon, $size = 'full') {
     return !empty($favicon['url']) ? $favicon['url'] : '';
 }
 
-add_action('wp_head', function () {
+function emsaks_get_company_logo($variant = 'dark') {
+    $fallback = [
+        'url' => THEME_URI . '/assets/images/logo.svg',
+        'alt' => get_bloginfo('name'),
+    ];
+
+    if (function_exists('get_field')) {
+        $field = $variant === 'light' ? 'company_logo_light' : 'company_logo_dark';
+        $logo = get_field($field, 'option');
+
+        if (is_array($logo) && !empty($logo['url'])) {
+            return [
+                'url' => $logo['url'],
+                'alt' => !empty($logo['alt']) ? $logo['alt'] : $fallback['alt'],
+            ];
+        }
+
+        if (is_string($logo) && $logo !== '') {
+            return [
+                'url' => $logo,
+                'alt' => $fallback['alt'],
+            ];
+        }
+    }
+
+    $custom_logo_id = get_theme_mod('custom_logo');
+    if ($custom_logo_id) {
+        $custom_logo_url = wp_get_attachment_image_url((int) $custom_logo_id, 'full');
+
+        if ($custom_logo_url) {
+            return [
+                'url' => $custom_logo_url,
+                'alt' => get_post_meta((int) $custom_logo_id, '_wp_attachment_image_alt', true) ?: $fallback['alt'],
+            ];
+        }
+    }
+
+    return $fallback;
+}
+
+add_action('login_enqueue_scripts', function () {
+    $logo = emsaks_get_company_logo('dark');
+
+    if (empty($logo['url'])) {
+        return;
+    }
+
+    ?>
+    <style>
+        body.login div#login h1 a {
+            background-image: url('<?php echo esc_url($logo['url']); ?>');
+            background-position: center;
+            background-size: contain;
+            height: 96px;
+            width: 240px;
+            max-width: 100%;
+        }
+    </style>
+    <?php
+});
+
+add_filter('login_headerurl', function () {
+    return home_url('/');
+});
+
+add_filter('login_headertext', function () {
+    $logo = emsaks_get_company_logo('dark');
+
+    return !empty($logo['alt']) ? $logo['alt'] : get_bloginfo('name');
+});
+
+function emsaks_output_site_icons() {
     if (!function_exists('get_field')) {
         return;
     }
@@ -231,6 +302,8 @@ add_action('wp_head', function () {
     }
 
     remove_action('wp_head', 'wp_site_icon', 99);
+    remove_action('admin_head', 'wp_site_icon', 99);
+    remove_action('login_head', 'wp_site_icon', 99);
 
     $attachment_id = !empty($favicon['ID']) ? (int) $favicon['ID'] : 0;
     $mime_type = $attachment_id ? get_post_mime_type($attachment_id) : '';
@@ -279,7 +352,11 @@ add_action('wp_head', function () {
     echo '<meta name="apple-mobile-web-app-title" content="' . esc_attr($site_name) . '">' . "\n";
     echo '<meta name="msapplication-TileColor" content="' . esc_attr($theme_color) . '">' . "\n";
     echo '<meta name="theme-color" content="' . esc_attr($theme_color) . '">' . "\n";
-}, 4);
+}
+
+add_action('wp_head', 'emsaks_output_site_icons', 4);
+add_action('admin_head', 'emsaks_output_site_icons', 4);
+add_action('login_head', 'emsaks_output_site_icons', 4);
 
 add_action('rest_api_init', function () {
     register_rest_route('emsaks/v1', '/site.webmanifest', [
