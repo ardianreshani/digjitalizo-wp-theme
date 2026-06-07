@@ -44,51 +44,34 @@ if (is_user_logged_in()) {
     $logout_url = function_exists('wc_logout_url') ? wc_logout_url() : $logout_url;
 }
 
-$language_switcher_html = '';
+$lang_items       = [];
+$current_lang_code = '';
+
 if (function_exists('pll_the_languages')) {
-    $languages = pll_the_languages([
-        'raw'              => 1,
-        'dropdown'         => 0,
-        'show_flags'       => 0,
-        'show_names'       => 0,
-        'display_names_as' => 'slug',
-        'hide_current'     => 0,
-    ]);
-
-    if (!empty($languages) && is_array($languages)) {
-        $language_items = [];
-        foreach ($languages as $language) {
-            $language_items[] = sprintf(
-                '<a href="%s" class="%s">%s</a>',
-                esc_url($language['url'] ?? '#'),
-                !empty($language['current_lang']) ? 'is-active' : '',
-                esc_html(strtoupper($language['slug'] ?? ''))
-            );
+    $_pll = pll_the_languages(['raw' => 1, 'dropdown' => 0, 'show_flags' => 0, 'show_names' => 1, 'display_names_as' => 'name', 'hide_current' => 0]);
+    if (!empty($_pll) && is_array($_pll)) {
+        foreach ($_pll as $_l) {
+            $code = strtoupper($_l['slug'] ?? '');
+            $active = !empty($_l['current_lang']);
+            if ($active) $current_lang_code = $code;
+            $lang_items[] = ['url' => $_l['url'] ?? '#', 'code' => $code, 'name' => $_l['name'] ?? $code, 'active' => $active];
         }
-        $language_switcher_html = implode('', $language_items);
     }
-} elseif (has_filter('wpml_active_languages')) {
-    $languages = apply_filters('wpml_active_languages', null, [
-        'skip_missing' => 0,
-        'orderby'      => 'code',
-    ]);
-
-    if (!empty($languages) && is_array($languages)) {
-        $language_items = [];
-        foreach ($languages as $language) {
-            $language_items[] = sprintf(
-                '<a href="%s" class="%s">%s</a>',
-                esc_url($language['url'] ?? '#'),
-                !empty($language['active']) ? 'is-active' : '',
-                esc_html(strtoupper($language['language_code'] ?? ''))
-            );
+} elseif (defined('ICL_SITEPRESS_VERSION') || function_exists('icl_object_id')) {
+    $_wpml = apply_filters('wpml_active_languages', null, ['skip_missing' => 0, 'orderby' => 'code']);
+    if (!empty($_wpml) && is_array($_wpml)) {
+        foreach ($_wpml as $_l) {
+            $code = strtoupper($_l['language_code'] ?? '');
+            $active = !empty($_l['active']);
+            if ($active) $current_lang_code = $code;
+            $lang_items[] = ['url' => $_l['url'] ?? '#', 'code' => $code, 'name' => $_l['translated_name'] ?? $code, 'active' => $active];
         }
-        $language_switcher_html = implode('', $language_items);
     }
 }
 
-if (!$language_switcher_html) {
-    $language_switcher_html = '<span>' . esc_html(strtoupper(substr(determine_locale(), 0, 2))) . '</span>';
+if (empty($lang_items)) {
+    $current_lang_code = strtoupper(substr(determine_locale(), 0, 2));
+    $lang_items = [['url' => '#', 'code' => $current_lang_code, 'name' => $current_lang_code, 'active' => true]];
 }
 
 // Determine active step
@@ -147,11 +130,37 @@ if (is_checkout() && !is_wc_endpoint_url('order-received')) $step = 2;
                 <img src="<?php echo esc_url($header_logo_url); ?>"
                      alt="<?php echo esc_attr($header_logo_alt); ?>" class="site-logo-img">
             </a>
-
-            <div class="header-language-switcher" aria-label="<?php echo esc_attr__('Ndrysho gjuhën', 'base-theme'); ?>">
-                <?php echo wp_kses_post($language_switcher_html); ?>
+            <div class="flex items-center gap-2">
+            <?php if (count($lang_items) > 1) : ?>
+            <div class="lang-switcher block lg:hidden" data-lang-switcher>
+                <button type="button" class="lang-switcher-toggle" aria-expanded="false" aria-haspopup="listbox"
+                        aria-label="<?php esc_attr_e('Ndrysho gjuhën', 'base-theme'); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span class="lang-switcher-code"><?php echo esc_html($current_lang_code); ?></span>
+                    <svg class="lang-switcher-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                    </svg>
+                </button>
+                <div class="lang-switcher-dropdown" role="listbox" aria-label="<?php esc_attr_e('Zgjidhni gjuhën', 'base-theme'); ?>">
+                    <?php foreach ($lang_items as $_li) : ?>
+                    <a href="<?php echo esc_url($_li['url']); ?>"
+                       class="lang-switcher-item<?php echo $_li['active'] ? ' is-active' : ''; ?>"
+                       role="option" aria-selected="<?php echo $_li['active'] ? 'true' : 'false'; ?>">
+                        <span><?php echo esc_html($_li['code']); ?></span>
+                        <?php if ($_li['active']) : ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                        </svg>
+                        <?php endif; ?>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-
+            <?php endif; ?>
             <button type="button"
                     class="header-mobile-menu-toggle"
                     data-mobile-menu-toggle
@@ -162,7 +171,7 @@ if (is_checkout() && !is_wc_endpoint_url('order-received')) $step = 2;
                     <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
                 </svg>
             </button>
-
+            </div>
             <!-- Search -->
             <form role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>"
                   class="header-search" autocomplete="off">
@@ -185,6 +194,36 @@ if (is_checkout() && !is_wc_endpoint_url('order-received')) $step = 2;
 
             <!-- Actions -->
             <div class="header-actions">
+            <?php if (count($lang_items) > 1) : ?>
+            <div class="lang-switcher" data-lang-switcher>
+                <button type="button" class="lang-switcher-toggle" aria-expanded="false" aria-haspopup="listbox"
+                        aria-label="<?php esc_attr_e('Ndrysho gjuhën', 'base-theme'); ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span class="lang-switcher-code"><?php echo esc_html($current_lang_code); ?></span>
+                    <svg class="lang-switcher-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                    </svg>
+                </button>
+                <div class="lang-switcher-dropdown" role="listbox" aria-label="<?php esc_attr_e('Zgjidhni gjuhën', 'base-theme'); ?>">
+                    <?php foreach ($lang_items as $_li) : ?>
+                    <a href="<?php echo esc_url($_li['url']); ?>"
+                       class="lang-switcher-item<?php echo $_li['active'] ? ' is-active' : ''; ?>"
+                       role="option" aria-selected="<?php echo $_li['active'] ? 'true' : 'false'; ?>">
+                        <span><?php echo esc_html($_li['code']); ?></span>
+                        <?php if ($_li['active']) : ?>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                        </svg>
+                        <?php endif; ?>
+                    </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
                 <?php if (is_user_logged_in()) :
                     ?>
                     <div class="header-account">

@@ -637,6 +637,27 @@
     }
   });
 
+  // ── Language switcher dropdown ────────────────────────────────────────────
+  $(document).on('click', '.lang-switcher-toggle', function () {
+    const $sw = $(this).closest('[data-lang-switcher]');
+    const open = $sw.hasClass('is-open');
+    $('[data-lang-switcher]').removeClass('is-open').find('.lang-switcher-toggle').attr('aria-expanded', 'false');
+    if (!open) {
+      $sw.addClass('is-open');
+      $(this).attr('aria-expanded', 'true');
+    }
+  });
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('[data-lang-switcher]').length) {
+      $('[data-lang-switcher]').removeClass('is-open').find('.lang-switcher-toggle').attr('aria-expanded', 'false');
+    }
+  });
+  $(document).on('keydown', function (e) {
+    if (e.key === 'Escape') {
+      $('[data-lang-switcher]').removeClass('is-open').find('.lang-switcher-toggle').attr('aria-expanded', 'false');
+    }
+  });
+
   // ── Password show/hide toggle ────────────────────────────────────────────
   $(document).on('click', '.auth-toggle-pw', function () {
     const $wrap = $(this).closest('.auth-password-wrap');
