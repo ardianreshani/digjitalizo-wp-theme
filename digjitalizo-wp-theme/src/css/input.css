@@ -1094,36 +1094,27 @@
     @apply bg-white border-b border-[#ececec] py-4;
   }
   .header-checkout .container { @apply max-w-[1460px]; }
+  @media (max-width: 1023px) {
+    .header-checkout .site-logo-link {
+      width: min(120px, 40vw);
+    }
+  }
   .header-checkout {
     @apply overflow-hidden;
   }
   .checkout-steps {
-    @apply flex justify-center items-center gap-4 sm:gap-8 lg:gap-16 flex-1 min-w-0;
+    @apply flex justify-center items-center gap-4 sm:gap-8 lg:gap-10 flex-1 min-w-0;
   }
   .checkout-step {
-    @apply flex items-center gap-2 text-sm sm:text-lg font-body text-[#9e9e9e] shrink-0;
+    @apply flex items-center gap-2 text-sm lg:text-base font-body text-[#9e9e9e] shrink-0;
   }
   .checkout-step > span:not(.checkout-step-num),
   .checkout-step > a {
-    @apply hidden;
+    @apply hidden sm:inline;
   }
   .checkout-step-num {
     @apply w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#CFE5F4] flex items-center
            justify-center text-sm sm:text-base text-[#165783] font-bold font-body shrink-0;
-  }
-  @media (max-width: 639px) {
-    .header-checkout {
-      @apply py-2;
-    }
-    .header-checkout .site-logo-link {
-      width: min(90px, 28vw);
-    }
-    .checkout-steps {
-      @apply gap-3;
-    }
-    .checkout-step-num {
-      @apply w-7 h-7 text-xs;
-    }
   }
   .checkout-step.active { @apply text-heading font-semibold; }
   .checkout-step.active .checkout-step-num {
@@ -1139,7 +1130,7 @@
     @apply border-t border-[#e0e0e0] py-4 mt-8;
   }
   .footer-minimal-inner {
-    @apply flex flex-wrap items-center justify-center gap-x-4 gap-y-1
+    @apply flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-x-4 gap-y-1
            text-xs text-muted;
   }
   .footer-minimal-inner a { @apply text-muted hover:text-brand; }
@@ -1201,7 +1192,7 @@
   .footer-col .menu li.current-menu-ancestor > a::after,
   .footer-col .menu li.current_page_item > a::after,
   .footer-col .menu li.current_page_ancestor > a::after {
-    transform: scaleX(1);
+    transform: scaleX(0);
   }
   .footer-logo-link {
     @apply inline-block mb-8;
@@ -1520,7 +1511,7 @@
     @apply bg-[#f0f0f0] border-0 p-8 sticky top-24;
   }
   .order-summary-title {
-    @apply text-3xl font-semibold font-heading text-heading mb-8;
+    @apply text-xl font-semibold font-heading text-heading mb-8;
   }
   .order-summary-row {
     @apply flex items-center justify-between py-2.5 text-base text-heading
@@ -1691,7 +1682,7 @@
     @apply bg-white rounded-none border border-[#e6e6e6] p-6 mb-7;
   }
   .checkout-section-title {
-    @apply text-3xl font-semibold font-heading text-heading mb-7;
+    @apply text-xl font-semibold font-heading text-heading mb-7;
   }
   .checkout-billing-toggle {
     @apply !pt-4 !pb-4;
