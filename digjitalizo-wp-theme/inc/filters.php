@@ -381,6 +381,8 @@ function emsaks_render_attribute_filters(array $active_filters): void {
     if (!function_exists('wc_get_attribute_taxonomies')) return;
 
     foreach (wc_get_attribute_taxonomies() as $attr) {
+        if (!emsaks_is_attribute_filterable($attr->attribute_name)) continue;
+
         $taxonomy = wc_attribute_taxonomy_name($attr->attribute_name);
         if (!taxonomy_exists($taxonomy)) continue;
 
@@ -635,7 +637,7 @@ function emsaks_render_archive_tabs(WP_Term $term): void {
         $tree = emsaks_get_filter_category_tree($term);
         $tabs = $tree['map'][0] ?? [];
 
-        if (empty($tabs)) return;
+        if (count($tabs) <= 1) return;
 
         $active_category = emsaks_get_brand_archive_category();
         $active_root_id   = emsaks_get_root_product_category_id($active_category);
@@ -668,7 +670,7 @@ function emsaks_render_archive_tabs(WP_Term $term): void {
 
     if (empty($tabs) || is_wp_error($tabs)) return;
     ?>
-    <nav class="archive-tabs" aria-label="<?php esc_attr_e('Kategoritë', 'base-theme'); ?>">
+    <nav class="archive-tabs archive-tabs--brand" aria-label="<?php esc_attr_e('Kategoritë', 'base-theme'); ?>">
         <?php if ($all_name && $all_url) : ?>
             <a href="<?php echo esc_url($all_url); ?>"
                class="archive-tab <?php echo !$term->parent ? 'is-active' : ''; ?>">

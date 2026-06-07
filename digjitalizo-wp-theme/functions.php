@@ -1424,6 +1424,7 @@ function emsaks_render_blog_archive_page($title = '', $description = '') {
 }
 
 // ─── Archive filters & helpers ────────────────────────────────────────────────
+require_once THEME_DIR . '/inc/attribute-filter-settings.php';
 require_once THEME_DIR . '/inc/filters.php';
 
 add_action('wp_enqueue_scripts', function () {

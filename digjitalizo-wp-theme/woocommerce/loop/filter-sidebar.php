@@ -29,7 +29,12 @@ $has_active   = !empty($active_attrs) || isset($_GET['min_price']) || isset($_GE
 
 <?php emsaks_render_filter_categories(); ?>
 
-<?php if (function_exists('wc_get_attribute_taxonomies') && wc_get_attribute_taxonomies()) : ?>
+<?php
+$_filterable_attrs = array_filter(
+    function_exists('wc_get_attribute_taxonomies') ? (array) wc_get_attribute_taxonomies() : [],
+    fn($a) => emsaks_is_attribute_filterable($a->attribute_name)
+);
+if (!empty($_filterable_attrs)) : ?>
     <p class="filter-section-heading"><?php esc_html_e('Filtro Produktet', 'base-theme'); ?></p>
     <?php emsaks_render_attribute_filters($active_attrs); ?>
 <?php endif; ?>
