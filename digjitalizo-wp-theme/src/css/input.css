@@ -502,7 +502,7 @@
     @apply bg-brand-light;
   }
   .home-slider-arrows {
-    @apply absolute bottom-4 right-5 flex items-center gap-4 z-10;
+    @apply hidden md:flex absolute bottom-4 right-5 items-center gap-4 z-10;
   }
   .home-slider-arrow {
     @apply flex h-8 w-8 items-center justify-center text-heading transition-colors;
@@ -1105,11 +1105,25 @@
   }
   .checkout-step > span:not(.checkout-step-num),
   .checkout-step > a {
-    @apply hidden sm:inline;
+    @apply hidden;
   }
   .checkout-step-num {
     @apply w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#CFE5F4] flex items-center
            justify-center text-sm sm:text-base text-[#165783] font-bold font-body shrink-0;
+  }
+  @media (max-width: 639px) {
+    .header-checkout {
+      @apply py-2;
+    }
+    .header-checkout .site-logo-link {
+      width: min(90px, 28vw);
+    }
+    .checkout-steps {
+      @apply gap-3;
+    }
+    .checkout-step-num {
+      @apply w-7 h-7 text-xs;
+    }
   }
   .checkout-step.active { @apply text-heading font-semibold; }
   .checkout-step.active .checkout-step-num {
@@ -1551,6 +1565,20 @@
   .order-summary-product-price .was {
     @apply line-through text-sale font-normal block text-xs;
   }
+  @media (max-width: 767px) {
+    .order-summary-product {
+      @apply grid-cols-[48px_1fr] gap-x-3 gap-y-0.5 items-start;
+    }
+    .order-summary-product img {
+      @apply row-span-3 self-start;
+    }
+    .order-summary-product-meta {
+      @apply text-left text-xs text-muted;
+    }
+    .order-summary-product-price {
+      @apply text-left;
+    }
+  }
 
   .cart-related { @apply max-w-[1185px] ml-0  mt-16; }
   .cart-related h2 { @apply text-3xl font-heading font-semibold text-heading mb-5; }
@@ -1729,8 +1757,19 @@
   .checkout-payment-section .wc_payment_method input[type=radio] {
     @apply accent-brand;
   }
-  .checkout-payment-section .payment_box {
-    @apply mt-7 px-5 py-5 border border-[#e6e6e6] bg-white text-sm text-text;
+  .checkout-payment-section .payment_box,
+  #add_payment_method #payment div.payment_box,
+  .woocommerce-cart #payment div.payment_box,
+  .woocommerce-checkout #payment div.payment_box {
+    @apply mt-3 px-5 py-5 border border-[#e6e6e6] bg-white text-sm text-text rounded-none;
+    background-color: #fff !important;
+    color: var(--color-text) !important;
+    box-shadow: none !important;
+  }
+  #add_payment_method #payment div.payment_box::before,
+  .woocommerce-cart #payment div.payment_box::before,
+  .woocommerce-checkout #payment div.payment_box::before {
+    display: none !important;
   }
   .checkout-payment-section .form-row.place-order {
     @apply block mt-6 p-0;
