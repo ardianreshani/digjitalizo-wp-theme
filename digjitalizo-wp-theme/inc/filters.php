@@ -1,6 +1,12 @@
 <?php
 defined('ABSPATH') || exit;
 
+// ── Category visibility helper ────────────────────────────────────────────────
+function emsaks_hide_empty_categories(): bool {
+    $show = function_exists('get_field') ? get_field('woo_show_empty_categories', 'option') : false;
+    return !$show;
+}
+
 // ── Sale products archive ────────────────────────────────────────────────────
 function emsaks_is_sale_products_request(): bool {
     return isset($_GET['on_sale'])
@@ -527,7 +533,7 @@ function emsaks_render_price_filter(): void {
 function emsaks_render_kategorit_categories(): void {
     $all_terms = get_terms([
         'taxonomy'   => 'product_cat',
-        'hide_empty' => true,
+        'hide_empty' => emsaks_hide_empty_categories(),
         'orderby'    => 'name',
         'number'     => 0,
     ]);
@@ -657,13 +663,13 @@ function emsaks_render_archive_tabs(WP_Term $term): void {
     if ($term->parent) {
         // Child category: tabs = siblings, first tab = link to parent ("all")
         $parent = get_term($term->parent, 'product_cat');
-        $tabs   = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->parent, 'hide_empty' => true, 'orderby' => 'name']);
+        $tabs   = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->parent, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'name']);
 
         $all_url  = (!is_wp_error($parent)) ? emsaks_preserve_sale_products_url(get_term_link($parent)) : '';
         $all_name = (!is_wp_error($parent)) ? $parent->name : '';
     } else {
         // Top-level category: tabs = children, first tab = self ("all")
-        $tabs     = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => true, 'orderby' => 'name']);
+        $tabs     = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'name']);
         $all_url  = emsaks_preserve_sale_products_url(get_term_link($term));
         $all_name = $term->name;
     }

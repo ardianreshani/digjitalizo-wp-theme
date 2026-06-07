@@ -73,6 +73,17 @@ acf_add_local_field_group([
             'instructions'  => 'Select the Contact Form 7 form to show when a product is out of stock. Leave empty to hide the inquiry button.',
         ],
 
+        // ─── Categories ───────────────────────────────────────────────────────
+        [
+            'key'           => 'field_woo_show_empty_categories',
+            'label'         => 'Show empty categories',
+            'name'          => 'woo_show_empty_categories',
+            'type'          => 'true_false',
+            'ui'            => 1,
+            'default_value' => 0,
+            'instructions'  => 'When enabled, categories with no products are still shown in the archive tabs and navigation.',
+        ],
+
         // ─── Free Shipping ────────────────────────────────────────────────────
         [
             'key'          => 'field_woo_free_shipping_threshold',
