@@ -91,7 +91,18 @@ if ($inquiry_form_id === null) {
             <?php echo esc_html($product->get_name()); ?>
         </a>
 
-        <div class="product-loop-card-price"><?php echo wp_kses_post($product->get_price_html()); ?></div>
+        <div class="product-loop-card-price">
+            <?php if ($product->is_type('variable')) : ?>
+                <?php if ($discount > 0) : ?>
+                    <del><?php echo wp_kses_post(wc_price($regular_price)); ?></del>
+                    <ins><?php echo wp_kses_post(wc_price($sale_price)); ?></ins>
+                <?php elseif ($regular_price > 0) : ?>
+                    <?php echo wp_kses_post(wc_price($regular_price)); ?>
+                <?php endif; ?>
+            <?php else : ?>
+                <?php echo wp_kses_post($product->get_price_html()); ?>
+            <?php endif; ?>
+        </div>
     </div>
 
     <?php if (!$is_in_stock && $inquiry_form_id) : ?>

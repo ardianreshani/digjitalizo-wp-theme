@@ -588,7 +588,7 @@
   }
   .product-loop-card-title {
     @apply min-h-[72px] font-heading text-base font-bold uppercase leading-snug text-heading
-           transition-colors line-clamp-3;
+           transition-colors line-clamp-3 pt-[10px];
   }
   .product-loop-card-title:hover {
     @apply text-brand;
