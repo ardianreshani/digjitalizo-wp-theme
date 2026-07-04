@@ -5,6 +5,28 @@ acf_add_local_field_group([
     'title'                 => 'Product extra content',
     'fields'                => [
         [
+            'key'           => 'field_product_pdf_file',
+            'label'         => 'PDF File',
+            'name'          => 'product_pdf_file',
+            'type'          => 'file',
+            'instructions'  => 'Upload the PDF document that should appear in the product additional information table.',
+            'required'      => 0,
+            'return_format' => 'array',
+            'library'       => 'all',
+            'mime_types'    => 'pdf',
+        ],
+        [
+            'key'           => 'field_product_masonry_gallery',
+            'label'         => 'Product Masonry Gallery',
+            'name'          => 'product_masonry_gallery',
+            'type'          => 'gallery',
+            'instructions'  => 'Add product or application images. They will appear in a mixed-width gallery below the product description.',
+            'return_format' => 'array',
+            'preview_size'  => 'medium',
+            'insert'        => 'append',
+            'library'       => 'all',
+        ],
+        [
             'key'          => 'field_product_extra_sections',
             'label'        => 'Extra content sections',
             'name'         => 'product_extra_sections',

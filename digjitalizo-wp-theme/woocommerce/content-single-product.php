@@ -114,6 +114,8 @@ $related_products = emsaks_get_single_product_related_products($product, 5);
         <?php woocommerce_output_product_data_tabs(); ?>
     </div>
 
+    <?php emsaks_render_product_masonry_gallery($product_id); ?>
+
     <?php emsaks_render_product_extra_sections($product_id); ?>
 
     <?php emsaks_render_single_product_section(__('Produkte të sugjeruara', 'base-theme'), $upsells, 'single-product-upsells'); ?>

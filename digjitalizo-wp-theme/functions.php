@@ -1,6 +1,6 @@
 <?php
 
-define('THEME_VERSION', '1.0.30');
+define('THEME_VERSION', '1.0.40');
 define('THEME_DIR', get_template_directory());
 define('THEME_URI', get_template_directory_uri());
 
@@ -700,6 +700,127 @@ function emsaks_render_product_extra_sections($product_id) {
         echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 }
+
+function emsaks_render_product_masonry_gallery($product_id) {
+    $gallery = function_exists('get_field')
+        ? get_field('product_masonry_gallery', $product_id)
+        : [];
+
+    if (empty($gallery) || !is_array($gallery)) {
+        return;
+    }
+
+    $images = [];
+
+    foreach ($gallery as $image) {
+        $attachment_id = 0;
+        $image_url = '';
+        $image_alt = get_the_title($product_id);
+
+        if (is_array($image)) {
+            $attachment_id = (int) ($image['ID'] ?? $image['id'] ?? 0);
+            $image_url = (string) ($image['url'] ?? '');
+            $image_alt = trim((string) ($image['alt'] ?? '')) ?: $image_alt;
+        } elseif (is_numeric($image)) {
+            $attachment_id = (int) $image;
+        } elseif (is_string($image)) {
+            $image_url = $image;
+        }
+
+        if ($attachment_id) {
+            $image_url = wp_get_attachment_image_url($attachment_id, 'large');
+            $attachment_alt = trim((string) get_post_meta($attachment_id, '_wp_attachment_image_alt', true));
+            $image_alt = $attachment_alt ?: $image_alt;
+        }
+
+        if (!$image_url) {
+            continue;
+        }
+
+        $images[] = [
+            'id'  => $attachment_id,
+            'url' => $image_url,
+            'alt' => $image_alt,
+        ];
+    }
+
+    if (!$images) {
+        return;
+    }
+    ?>
+    <section class="single-product-masonry-gallery" aria-labelledby="product-masonry-gallery-title">
+        <h2 id="product-masonry-gallery-title"><?php esc_html_e('Galeria e produktit', 'base-theme'); ?></h2>
+
+        <div class="single-product-masonry-gallery-grid">
+            <?php foreach ($images as $image) : ?>
+                <figure class="single-product-masonry-gallery-item">
+                    <?php if ($image['id']) : ?>
+                        <?php
+                        echo wp_get_attachment_image(
+                            $image['id'],
+                            'large',
+                            false,
+                            [
+                                'class'   => 'single-product-masonry-gallery-image',
+                                'loading' => 'lazy',
+                                'sizes'   => '(min-width: 1024px) 50vw, (min-width: 640px) 100vw, 100vw',
+                            ]
+                        );
+                        ?>
+                    <?php else : ?>
+                        <img
+                            class="single-product-masonry-gallery-image"
+                            src="<?php echo esc_url($image['url']); ?>"
+                            alt="<?php echo esc_attr($image['alt']); ?>"
+                            loading="lazy">
+                    <?php endif; ?>
+                </figure>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php
+}
+
+function emsaks_get_product_pdf_url($product_id) {
+    if (!function_exists('get_field')) {
+        return '';
+    }
+
+    $pdf = get_field('product_pdf_file', $product_id);
+    $pdf_url = '';
+
+    if (is_array($pdf) && !empty($pdf['url'])) {
+        $pdf_url = $pdf['url'];
+    } elseif (is_numeric($pdf)) {
+        $pdf_url = wp_get_attachment_url((int) $pdf);
+    } elseif (is_string($pdf)) {
+        $pdf_url = $pdf;
+    }
+
+    return $pdf_url ? esc_url_raw($pdf_url) : '';
+}
+
+// WooCommerce normally hides this tab when a product has no standard
+// attributes. Keep it available when the product PDF is the only content.
+add_filter('woocommerce_product_tabs', function ($tabs) {
+    global $product;
+
+    if (
+        isset($tabs['additional_information'])
+        || !is_a($product, 'WC_Product')
+        || !emsaks_get_product_pdf_url($product->get_id())
+    ) {
+        return $tabs;
+    }
+
+    $tabs['additional_information'] = [
+        'title'    => __('Additional information', 'woocommerce'),
+        'priority' => 20,
+        'callback' => 'woocommerce_product_additional_information_tab',
+    ];
+
+    return $tabs;
+}, 20);
 
 /* Dequeue WC default gallery scripts when our custom gallery is active */
 add_action('wp_enqueue_scripts', function () {

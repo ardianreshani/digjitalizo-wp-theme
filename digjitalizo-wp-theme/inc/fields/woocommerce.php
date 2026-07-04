@@ -30,6 +30,18 @@ acf_add_local_field_group([
                 ['field' => 'field_woo_gallery_enabled', 'operator' => '==', 'value' => '1'],
             ]],
         ],
+        [
+            'key'               => 'field_woo_gallery_lightbox_thumbnails',
+            'label'             => 'Lightbox Thumbnails',
+            'name'              => 'woo_gallery_lightbox_thumbnails',
+            'type'              => 'true_false',
+            'default_value'     => 1,
+            'ui'                => 1,
+            'instructions'      => 'Show a thumbnail strip below the large image when the product gallery lightbox is open.',
+            'conditional_logic' => [[
+                ['field' => 'field_woo_gallery_enabled', 'operator' => '==', 'value' => '1'],
+            ]],
+        ],
 
         // ─── Variable Products ────────────────────────────────────────────────
         [

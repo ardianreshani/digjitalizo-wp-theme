@@ -27,6 +27,8 @@ if (!$gallery_enabled) {
 
 /* ── Build image list ─────────────────────────────────────────────────────── */
 $thumb_pos   = function_exists('get_field') ? (get_field('woo_gallery_thumb_pos', 'option') ?: 'bottom') : 'bottom';
+$raw_lightbox_thumbs = function_exists('get_field') ? get_field('woo_gallery_lightbox_thumbnails', 'option') : null;
+$lightbox_thumbs_enabled = ($raw_lightbox_thumbs === null || $raw_lightbox_thumbs === '' || (bool) $raw_lightbox_thumbs);
 $main_id     = $product->get_image_id();
 $gallery_ids = $product->get_gallery_image_ids();
 $all_ids     = $main_id ? array_merge([$main_id], $gallery_ids) : $gallery_ids;
@@ -53,6 +55,7 @@ $has_thumbs = count($images) > 1;
 
 <div class="pga<?php echo $has_thumbs ? ' pga--has-thumbs' : ''; ?>"
      data-thumbs="<?php echo esc_attr($thumb_pos); ?>"
+     data-lightbox-thumbnails="<?php echo $lightbox_thumbs_enabled ? '1' : '0'; ?>"
      data-original-src="<?php echo esc_url($images[0]['full'][0]); ?>"
      data-original-srcset="<?php echo esc_attr($images[0]['srcset'] ?: ''); ?>"
      data-original-sizes="<?php echo esc_attr($images[0]['sizes'] ?: ''); ?>"

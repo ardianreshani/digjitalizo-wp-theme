@@ -2,8 +2,9 @@
     'use strict';
 
     var $gallery, $mainImg, $thumbs;
-    var images   = []; /* [{src, srcset, sizes, alt}] */
+    var images   = []; /* [{src, srcset, sizes, alt, thumb}] */
     var current  = 0;  /* index of image shown in main view */
+    var lightboxThumbsEnabled = false;
 
     /* ── Init ─────────────────────────────────────────────────────────────── */
     function init() {
@@ -12,6 +13,7 @@
 
         $mainImg = $gallery.find('.pga__main-img');
         $thumbs  = $gallery.find('.pga__thumb');
+        lightboxThumbsEnabled = String($gallery.data('lightbox-thumbnails')) !== '0';
 
         /* Build images array from thumbnails (+ main image if no thumbs) */
         if ($thumbs.length) {
@@ -22,6 +24,7 @@
                     srcset: $t.data('srcset') || '',
                     sizes:  $t.data('sizes')  || '',
                     alt:    $t.data('alt')    || '',
+                    thumb:  $t.find('img').attr('src') || $t.data('full'),
                 });
             });
         } else {
@@ -30,6 +33,7 @@
                 srcset: $gallery.data('original-srcset') || '',
                 sizes:  $gallery.data('original-sizes')  || '',
                 alt:    $gallery.data('original-alt')    || '',
+                thumb:  $gallery.data('original-src'),
             });
         }
 
@@ -132,7 +136,7 @@
     }
 
     /* ── Lightbox ─────────────────────────────────────────────────────────── */
-    var $lb, $lbImg, $lbClose, $lbPrev, $lbNext, $lbCounter;
+    var $lb, $lbImg, $lbClose, $lbPrev, $lbNext, $lbCounter, $lbThumbs;
     var lbActive = false;
     var lbIndex  = 0;
     var lbImages = []; /* images visible in lightbox — may differ from gallery during variation swap */
@@ -143,9 +147,12 @@
             '  <button class="pga-lb__close" aria-label="Close">&times;</button>',
             '  <button class="pga-lb__prev"  aria-label="Previous">&#8249;</button>',
             '  <button class="pga-lb__next"  aria-label="Next">&#8250;</button>',
-            '  <div class="pga-lb__stage">',
-            '    <img class="pga-lb__img" src="" alt="">',
+            '  <div class="pga-lb__viewer">',
+            '    <div class="pga-lb__stage">',
+            '      <img class="pga-lb__img" src="" alt="">',
+            '    </div>',
             '  </div>',
+            '  <div class="pga-lb__thumbs" role="list" aria-label="Product image thumbnails"></div>',
             '  <div class="pga-lb__counter"></div>',
             '</div>',
         ].join('')).appendTo('body');
@@ -155,6 +162,10 @@
         $lbPrev    = $lb.find('.pga-lb__prev');
         $lbNext    = $lb.find('.pga-lb__next');
         $lbCounter = $lb.find('.pga-lb__counter');
+        $lbThumbs  = $lb.find('.pga-lb__thumbs');
+
+        $lb.toggleClass('pga-lb--with-thumbs', lightboxThumbsEnabled);
+        $lbThumbs.toggle(lightboxThumbsEnabled);
 
         $lbClose.on('click', lightboxClose);
 
@@ -165,6 +176,10 @@
 
         $lbPrev.on('click', function () { lightboxNav(-1); });
         $lbNext.on('click', function () { lightboxNav(1); });
+        $lbThumbs.on('click', '.pga-lb__thumb', function () {
+            lbIndex = Number($(this).data('index'));
+            lightboxShow(lbIndex);
+        });
 
         $(document).on('keydown', function (e) {
             if (!lbActive) return;
@@ -187,12 +202,14 @@
                 srcset: $mainImg.attr('srcset') || '',
                 sizes:  $mainImg.attr('sizes')  || '',
                 alt:    $mainImg.attr('alt')    || '',
+                thumb:  mainSrc,
             });
             startIdx = 0;
         }
 
         lbIndex  = startIdx;
         lbActive = true;
+        lightboxBuildThumbs();
         $lb.attr('aria-hidden', 'false').addClass('is-open');
         $('body').css('overflow', 'hidden');
         lightboxShow(lbIndex);
@@ -210,7 +227,53 @@
 
         $lbPrev.toggle(lbImages.length > 1);
         $lbNext.toggle(lbImages.length > 1);
-        $lbCounter.text(lbImages.length > 1 ? (idx + 1) + ' / ' + lbImages.length : '');
+        $lbCounter.text(lbImages.length > 1 ? (idx + 1) + '/' + lbImages.length : '');
+
+        if (lightboxThumbsEnabled) {
+            var $activeThumb = $lbThumbs
+                .find('.pga-lb__thumb')
+                .removeClass('is-active')
+                .eq(idx)
+                .addClass('is-active');
+
+            if ($activeThumb.length && $activeThumb[0].scrollIntoView) {
+                $activeThumb[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center',
+                });
+            }
+        }
+    }
+
+    function lightboxBuildThumbs() {
+        $lbThumbs.empty();
+
+        if (!lightboxThumbsEnabled || lbImages.length < 2) {
+            $lbThumbs.hide();
+            $lb.removeClass('pga-lb--with-thumbs');
+            return;
+        }
+
+        $.each(lbImages, function (idx, img) {
+            var $button = $('<button>', {
+                type: 'button',
+                class: 'pga-lb__thumb',
+                role: 'listitem',
+                'aria-label': 'View image ' + (idx + 1),
+            }).data('index', idx);
+
+            $('<img>', {
+                src: img.thumb || img.src,
+                alt: '',
+                loading: 'lazy',
+            }).appendTo($button);
+
+            $button.appendTo($lbThumbs);
+        });
+
+        $lb.addClass('pga-lb--with-thumbs');
+        $lbThumbs.show();
     }
 
     function lightboxNav(dir) {

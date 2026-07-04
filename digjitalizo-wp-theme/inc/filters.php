@@ -158,7 +158,8 @@ function emsaks_get_filter_category_tree(?WP_Term $brand = null): array {
     $all_terms = get_terms([
         'taxonomy'   => 'product_cat',
         'hide_empty' => false,
-        'orderby'    => 'name',
+        'orderby'    => 'menu_order',
+        'order'      => 'ASC',
         'number'     => 0,
     ]);
 
@@ -534,7 +535,8 @@ function emsaks_render_kategorit_categories(): void {
     $all_terms = get_terms([
         'taxonomy'   => 'product_cat',
         'hide_empty' => emsaks_hide_empty_categories(),
-        'orderby'    => 'name',
+        'orderby'    => 'menu_order',
+        'order'      => 'ASC',
         'number'     => 0,
     ]);
 
@@ -663,13 +665,13 @@ function emsaks_render_archive_tabs(WP_Term $term): void {
     if ($term->parent) {
         // Child category: tabs = siblings, first tab = link to parent ("all")
         $parent = get_term($term->parent, 'product_cat');
-        $tabs   = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->parent, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'name']);
+        $tabs   = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->parent, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'menu_order', 'order' => 'ASC']);
 
         $all_url  = (!is_wp_error($parent)) ? emsaks_preserve_sale_products_url(get_term_link($parent)) : '';
         $all_name = (!is_wp_error($parent)) ? $parent->name : '';
     } else {
         // Top-level category: tabs = children, first tab = self ("all")
-        $tabs     = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'name']);
+        $tabs     = get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => emsaks_hide_empty_categories(), 'orderby' => 'menu_order', 'order' => 'ASC']);
         $all_url  = emsaks_preserve_sale_products_url(get_term_link($term));
         $all_name = $term->name;
     }
