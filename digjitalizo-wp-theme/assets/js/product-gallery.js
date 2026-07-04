@@ -145,15 +145,17 @@
         $lb = $([
             '<div class="pga-lb" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">',
             '  <button class="pga-lb__close" aria-label="Close">&times;</button>',
-            '  <button class="pga-lb__prev"  aria-label="Previous">&#8249;</button>',
-            '  <button class="pga-lb__next"  aria-label="Next">&#8250;</button>',
             '  <div class="pga-lb__viewer">',
+            '    <button class="pga-lb__prev"  aria-label="Previous">&#8249;</button>',
+            '    <button class="pga-lb__next"  aria-label="Next">&#8250;</button>',
             '    <div class="pga-lb__stage">',
             '      <img class="pga-lb__img" src="" alt="">',
             '    </div>',
             '  </div>',
-            '  <div class="pga-lb__thumbs" role="list" aria-label="Product image thumbnails"></div>',
-            '  <div class="pga-lb__counter"></div>',
+            '  <div class="pga-lb__footer">',
+            '    <div class="pga-lb__thumbs" role="list" aria-label="Product image thumbnails"></div>',
+            '    <div class="pga-lb__counter"></div>',
+            '  </div>',
             '</div>',
         ].join('')).appendTo('body');
 
